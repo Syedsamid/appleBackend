@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import config from "config";
 
-const userEmail = config.get("Email");
+const userEmail = config.get("EMAIL");
 const userAppPassword = config.get("PASS");
 
 async function sendMail(emailData){
@@ -23,7 +23,7 @@ async function sendMail(emailData){
             html: emailData.html,
             text:emailData.text,
         });
-        console.log("Email SEnt", info.messageId);
+        console.log("Email Sent", info.messageId);
     } catch (error) {
         console.log(error);
     }

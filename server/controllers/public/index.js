@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 const JWT_SECRET = config.get("JWT_SECRET");
-const URL = config.get("SEVER_URL");
+const URL = config.get("SERVER_URL");
 
 router.post("/register",async (req,res)=>{
     try {
@@ -60,7 +60,7 @@ router.post("/register",async (req,res)=>{
 
 // Login
 
-router.post("login",async (req,res)=>{
+router.post("/login",async (req,res)=>{
     try {
         const { email, password } = req.body;
 
@@ -85,7 +85,7 @@ router.post("login",async (req,res)=>{
         }
 
         // Generate JWT token
-        const token = jwt.sign({id: user._id}, JWT_SECRET, {expiresIn: "1hr"});
+        const token = jwt.sign({id: user._id}, JWT_KEY, {expiresIn: "1hr"});
     } catch (error) {
         console.log(error);
         res.status(500).json({msg: error.message});

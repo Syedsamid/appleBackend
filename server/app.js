@@ -1,5 +1,8 @@
 import express from "express";
 import config from "config";
+import publicRouter from "./controllers/public/index.js";
+import authMiddleware from "./middlewares/auth.js";
+
 import "./utils/dbConnect.js"
 
 //import Controllers
@@ -17,8 +20,14 @@ app.get("/",(req,res)=>{
         res.status(500).json({msg:error})
     }
 })
+
+//public routes
+app.use("/api/public",publicRouter);
+
+app.use(authMiddleware);
+
 // API Routers
-app.use("/user",userRouter)
+app.use("/api/private/user",userRouter)
 
 // Handle unknown Routes (404 Error Handling)
 app.use((req,res)=>{
