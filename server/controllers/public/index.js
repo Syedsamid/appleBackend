@@ -69,12 +69,29 @@ router.post("login",async (req,res)=>{
             return res.status(400).json({msg: "invalid Credentials"});
         }
         // check if email is verified
-        if(!user.userVerified.phone){
-            return res.status(400).json({msg: "Please verify you"})
+        if(!user.userVerified.email){
+            return res.status(400).json({msg: "Please verify your email before loggin in"})
         }
+
+        // check if phone is verified
+        if(!user.userVerified.phone){
+            return res.status(400).json({msg: "Phone verify your phone before loggin in"})
+        }
+
+        // Check password validity
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({msg: "Invalid credentials"});
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({id: user._id}, JWT_SECRET, {expiresIn: "1hr"});
     } catch (error) {
-        
+        console.log(error);
+        res.status(500).json({msg: error.message});
     }
-})
+});
+
+
 
 export default router;
