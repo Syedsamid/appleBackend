@@ -1,7 +1,7 @@
 import express from "express";
 import config from "config";
 import publicRouter from "./controllers/public/index.js";
-import authMiddleware from "./middlewares/auth.js";
+import authMiddleware from "./controllers/middlewares/auth.js";
 
 import "./utils/dbConnect.js"
 
