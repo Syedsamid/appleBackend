@@ -85,7 +85,9 @@ router.post("/login",async (req,res)=>{
         }
 
         // Generate JWT token
-        const token = jwt.sign({id: user._id}, JWT_KEY, {expiresIn: "1hr"});
+        const token = jwt.sign({id: user._id}, JWT_SECRET, {expiresIn: "1hr"});
+        
+        res.status(200).json({msg: "User LoggIn Successfully",token});
     } catch (error) {
         console.log(error);
         res.status(500).json({msg: error.message});
@@ -102,7 +104,7 @@ router.get("/emailverify/token",async(req,res)=>{
         }
         // Mark email as verified
         user.userVerified.email = true;
-        user.userVerifiedToken.email = null;
+        user.userVerifyToken.email = null;
         await user.save();
         res.status(200).json({msg: "Email Verified successfully"});
     } catch (error) {
