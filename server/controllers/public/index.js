@@ -92,6 +92,45 @@ router.post("login",async (req,res)=>{
     }
 });
 
+// Email verification Route
+router.get("/emailverify/token",async(req,res)=>{
+    try {
+        const {token} = req.params;
+        const user = await userModel.findOne({"userVerifyToken.email": token});
+        if (!user){
+            return res.status(400).json({msg:"Invalid email verification token"})
+        }
+        // Mark email as verified
+        user.userVerified.email = true;
+        user.userVerifiedToken.email = null;
+        await user.save();
+        res.status(200).json({msg: "Email Verified successfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg: error.message});
+    }
+});
 
+// Phone Verification 
+router.get("/phoneverify/:token", async (req,res)=>{
+    try {
+    const {token} = req.params;
+    const user = await userModel.findOne({"userVerifyToken.phone": token});
+
+    if(!user){
+        return res.status(400).json({msg: "Invalid phone veerigication token"})
+    }
+
+    // Mark phone as verified
+    user.userVerified.phone = true;
+    user.userVerifyToken.phone = null;
+    await user.save();
+
+    res.status(200).json({msg: "Phone verified successfully"})
+} catch (error) {
+    console.log(error);
+    res.status(500).json({msg: error.message});
+}
+});
 
 export default router;
