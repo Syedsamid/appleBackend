@@ -3,18 +3,6 @@ import userModel from "../../models/User/User.js";
 
 const router = express.Router();
 
-router.post("/register",async (req,res)=>{
-    try {
-        let userData = req.body;
-        console.log(userData);
-        await userModel.create(userData);
-        res.status(200).json({msg:"User Added Successfully"})
-    } catch (error) {
-        console.log(error);
-         res.status(500).json({msg: error});
-    }
-})
-
 router.get("/getallusers",async(req,res)=>{
     try {
         // fetch all users from the database
@@ -46,7 +34,7 @@ router.get("/getbyid/:id",async (req,res)=>{
         // let findMyUser = await userModel.findById(userInputID);
         let findMyUser = await userModel.findOne({_id:userInputID})
         if(!findMyUser){
-           return res.status(400).json({msg:"Invalid ID"}) 
+        return res.status(400).json({msg:"Invalid ID"}) 
         }
         res.status(200).json({msg:findMyUser})
         
@@ -73,7 +61,6 @@ router.put("/update/:id", async (req,res)=>{
                 new: true,
             }
         );
-
         res.status(200).json({msg:"User Updated successfully"});
 
     } catch (error) {

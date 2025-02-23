@@ -31,7 +31,8 @@ router.post("/register",async (req,res)=>{
             email,
             phone,
             password: hashedPassword,
-            userVerifyToken: {
+            userVerifyToken: 
+            {
                 email: emailToken,
                 phone: phoneToken,
             },
@@ -41,10 +42,12 @@ router.post("/register",async (req,res)=>{
         await sendMail({
             subject: "Email Verification",
             to: email,
-            html:` <p>Hello samid</p>
+            html:`<p>Click the link below to verify your email:</P>
+            <a>href="${URL}/api/public/emailverify/${emailToken}">Verify Email</a>
             <br>
-            <p>IF the link doesn't work copy and past the url<p/>
-            `
+            <p>If the link doesn't work, copy and paste this URL:</p>
+            <p>${URL}/api/public/emailverify/${emailToken}</p>`
+
         });
         console.log(`${URL}/api/public/emailverify/${emailToken}`);
         console.log(`Please verify your phone number: ${URL}/api/public/phoneverify/${phoneToken}`);
@@ -95,7 +98,7 @@ router.post("/login",async (req,res)=>{
 });
 
 // Email verification Route
-router.get("/emailverify/token",async(req,res)=>{
+router.get("/emailverify/:token",async(req,res)=>{
     try {
         const {token} = req.params;
         const user = await userModel.findOne({"userVerifyToken.email": token});
